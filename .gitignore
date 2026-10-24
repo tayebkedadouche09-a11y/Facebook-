@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Local DZ Smart Seller secrets — never commit the generated env file
+.env.dz-smart-seller
+
 # compiled output
 dist
 tmp

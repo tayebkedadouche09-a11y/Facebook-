@@ -1,0 +1,57 @@
+name: DZ Smart Seller Compose validation
+
+on:
+  push:
+    branches:
+      - dz-smart-seller-integration
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  compose-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create temporary validation environment
+        run: |
+          cp .env.dz-smart-seller.example .env.dz-smart-seller
+          sed -i 's/REPLACE_WITH_RANDOM_HEX_SECRET/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/g' .env.dz-smart-seller
+          chmod 600 .env.dz-smart-seller
+
+      - name: Validate combined Compose configuration
+        run: |
+          docker compose --env-file .env.dz-smart-seller \
+            -f docker-compose.yaml \
+            -f docker-compose.dz-smart-seller.yml config --quiet
+
+      - name: Inspect generated service graph
+        run: |
+          docker compose --env-file .env.dz-smart-seller \
+            -f docker-compose.yaml \
+            -f docker-compose.dz-smart-seller.yml config --format json > /tmp/dz-smart-seller-compose.json
+          python - <<'PY'
+          import json
+          with open("/tmp/dz-smart-seller-compose.json", encoding="utf-8") as handle:
+              config = json.load(handle)
+          services = config["services"]
+          required = {"postmill", "postmill-postgres", "postmill-redis", "postmill-inngest", "openpost", "dz-smart-seller-portal"}
+          missing = required.difference(services)
+          if missing:
+              raise SystemExit(f"Missing required services: {sorted(missing)}")
+          if services["openpost"]["environment"].get("OPENPOST_PROVIDER_APPS") != "[]":
+              raise SystemExit("Default Meta provider config should remain empty until user configures their own app.")
+          if "service_healthy" not in str(services["dz-smart-seller-portal"].get("depends_on", {})):
+              raise SystemExit("Portal must wait for OpenPost health check.")
+          print("Compose service graph validated:", ", ".join(sorted(required)))
+          PY
+
+      - name: Ensure real environment files are not tracked
+        run: |
+          if git ls-files --error-unmatch .env.dz-smart-seller >/dev/null 2>&1; then
+            echo "Refusing to track the real integration environment file."
+            exit 1
+          fi
