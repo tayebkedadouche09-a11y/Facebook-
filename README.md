@@ -225,4 +225,21 @@ This repository's source code is available under the [AGPL-3.0 license](LICENSE)
 
 ## DZ Smart Seller combined deployment
 
-This branch includes a Compose overlay for running Postmill and OpenPost side by side as the first DZ Smart Seller integration milestone. See [the integration guide](docs/DZ-SMART-SELLER-INTEGRATION.md) and [the Compose overlay](docker-compose.dz-smart-seller.yml). The two applications remain separate services and accounts until a tested shared API/authentication layer is implemented.
+This branch contains the first DZ Smart Seller deployment milestone: a shared Arabic launch portal, Postmill, OpenPost, Redis, PostgreSQL, and a local Inngest development server for scheduled jobs.
+
+### Windows quick start
+
+1. Install and start Docker Desktop.
+2. Open PowerShell at the repository root.
+3. Run `Set-ExecutionPolicy -Scope Process Bypass`.
+4. Run `.`\`integrations\launch-dz-smart-seller.ps1 start`.
+
+Local entry points:
+- Portal: http://localhost:3000
+- Postmill: http://localhost:4007
+- OpenPost (Facebook Page connection): http://localhost:8080
+- Inngest jobs dashboard: http://localhost:8288
+
+**Facebook connection requires your own Meta developer app, approved permissions, and correct OAuth configuration.** Public image/video publishing requires media reachable over HTTPS. See [the full integration guide](docs/DZ-SMART-SELLER-INTEGRATION.md), [the Compose overlay](docker-compose.dz-smart-seller.yml), and [the Windows launcher](integrations/launch-dz-smart-seller.ps1).
+
+This is a side-by-side deployment, not yet one shared-data application: the two apps retain separate accounts, databases, media libraries, and social connections. The stack has not been end-to-end verified against a real Meta Page in this environment.
