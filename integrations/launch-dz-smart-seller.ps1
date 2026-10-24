@@ -28,13 +28,20 @@ if (-not (Test-Path $EnvFile)) {
   $Content = Get-Content -Raw -Path $ExampleFile
   $Evaluator = [System.Text.RegularExpressions.MatchEvaluator]{
     param($Match)
-    [Convert]::ToHexString([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+    $Rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+    try {
+      $Bytes = New-Object byte[] 32
+      $Rng.GetBytes($Bytes)
+      [BitConverter]::ToString($Bytes).Replace("-", "")
+    } finally {
+      $Rng.Dispose()
+    }
   }
   $Content = [regex]::Replace($Content, "REPLACE_WITH_RANDOM_HEX_SECRET", $Evaluator)
   [System.IO.File]::WriteAllText(
     $EnvFile,
     $Content,
-    (New-Object System.Text.UTF8Encoding($false))
+    ([System.Text.UTF8Encoding]::new($false))
   )
   Write-Host "Created private .env.dz-smart-seller with unique secrets."
   Write-Host "Keep this file private. It is excluded from Git."
