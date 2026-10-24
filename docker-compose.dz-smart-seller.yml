@@ -1,0 +1,72 @@
+# DZ Smart Seller integration overlay.
+# Run with:
+# docker compose --env-file .env.dz-smart-seller -f docker-compose.yaml -f docker-compose.dz-smart-seller.yml config
+# docker compose --env-file .env.dz-smart-seller -f docker-compose.yaml -f docker-compose.dz-smart-seller.yml up -d
+#
+# This deploys both products side by side while preserving their separate
+# databases and user interfaces. It does NOT yet merge their frontends or
+# accounts into one application.
+
+services:
+  postmill:
+    environment:
+      MAIN_URL: ${POSTMILL_URL:-http://localhost:4007}
+      FRONTEND_URL: ${POSTMILL_URL:-http://localhost:4007}
+      NEXT_PUBLIC_BACKEND_URL: ${POSTMILL_URL:-http://localhost:4007}/api
+      JWT_SECRET: ${POSTMILL_JWT_SECRET:?Set POSTMILL_JWT_SECRET in .env.dz-smart-seller}
+      ENCRYPTION_KEY: ${POSTMILL_ENCRYPTION_KEY:?Set POSTMILL_ENCRYPTION_KEY in .env.dz-smart-seller}
+      DATABASE_URL: postgresql://postmill-user:${POSTMILL_DB_PASSWORD:?Set POSTMILL_DB_PASSWORD in .env.dz-smart-seller}@postmill-postgres:5432/postmill-db-local
+      REDIS_URL: redis://postmill-redis:6379
+    depends_on:
+      postmill-redis:
+        condition: service_healthy
+
+  postmill-postgres:
+    environment:
+      POSTGRES_PASSWORD: ${POSTMILL_DB_PASSWORD:?Set POSTMILL_DB_PASSWORD in .env.dz-smart-seller}
+
+  postmill-redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - dz-smart-seller-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - postmill-network
+
+  openpost:
+    image: ghcr.io/getopenpost/openpost:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      OPENPOST_PORT: "8080"
+      OPENPOST_EDITION: selfhost
+      OPENPOST_APP_URL: ${OPENPOST_URL:-http://localhost:8080}
+      OPENPOST_PUBLIC_URL: ${OPENPOST_URL:-http://localhost:8080}
+      OPENPOST_MEDIA_URL: ${OPENPOST_URL:-http://localhost:8080}/media
+      OPENPOST_JWT_SECRET: ${OPENPOST_JWT_SECRET:?Set OPENPOST_JWT_SECRET in .env.dz-smart-seller}
+      OPENPOST_ENCRYPTION_KEY: ${OPENPOST_ENCRYPTION_KEY:?Set OPENPOST_ENCRYPTION_KEY in .env.dz-smart-seller}
+      OPENPOST_DATABASE_DRIVER: sqlite
+      OPENPOST_DATABASE_PATH: /data/db/openpost.db
+      OPENPOST_STORAGE_DRIVER: local
+      OPENPOST_MEDIA_PATH: /data/media
+      OPENPOST_IMAGE_EDITOR_ENABLED: "true"
+      OPENPOST_WORKFLOWS_AI_ENABLED: "false"
+    volumes:
+      - dz-smart-seller-openpost:/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/v1/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  dz-smart-seller-redis:
+  dz-smart-seller-openpost:
