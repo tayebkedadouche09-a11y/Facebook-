@@ -97,7 +97,7 @@ services:
     # the NestJS backend (:3000) and everything else to the Next.js frontend
     # (:4200) — both internal only. Publish nginx, nothing else.
     ports:
-      - "4007:5000"
+      - "127.0.0.1:4007:5000"
     networks:
       - postmill-network
     depends_on:
