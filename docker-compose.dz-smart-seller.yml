@@ -9,6 +9,7 @@
 
 services:
   postmill:
+    container_name: dz-smart-seller-postmill
     environment:
       MAIN_URL: ${POSTMILL_URL:-http://localhost:4007}
       FRONTEND_URL: ${POSTMILL_URL:-http://localhost:4007}
@@ -22,6 +23,7 @@ services:
         condition: service_healthy
 
   postmill-postgres:
+    container_name: dz-smart-seller-postgres
     environment:
       POSTGRES_PASSWORD: ${POSTMILL_DB_PASSWORD:?Set POSTMILL_DB_PASSWORD in .env.dz-smart-seller}
 
@@ -65,6 +67,7 @@ services:
       OPENPOST_MEDIA_URL: ${OPENPOST_URL:-http://localhost:8080}/media
       OPENPOST_JWT_SECRET: ${OPENPOST_JWT_SECRET:?Set OPENPOST_JWT_SECRET in .env.dz-smart-seller}
       OPENPOST_ENCRYPTION_KEY: ${OPENPOST_ENCRYPTION_KEY:?Set OPENPOST_ENCRYPTION_KEY in .env.dz-smart-seller}
+      OPENPOST_PROVIDER_APPS: ${OPENPOST_PROVIDER_APPS:-[]}
       OPENPOST_DATABASE_DRIVER: sqlite
       OPENPOST_DATABASE_PATH: /data/db/openpost.db
       OPENPOST_STORAGE_DRIVER: local
