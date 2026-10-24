@@ -6,7 +6,7 @@ on:
       - dz-smart-seller-integration
   pull_request:
     branches:
-      - dz-smart-seller-integration
+      - main
   workflow_dispatch:
 
 jobs:
