@@ -56,7 +56,7 @@ services:
       OPENPOST_EDITION: selfhost
       OPENPOST_APP_URL: ${OPENPOST_URL:-http://localhost:8080}
       OPENPOST_PUBLIC_URL: ${OPENPOST_URL:-http://localhost:8080}
-      OPENPOST_MEDIA_URL: ${OPENPOST_URL:-http://localhost:8080}/media
+      OPENPOST_MEDIA_URL: ${OPENPOST_MEDIA_URL:-http://localhost:8080/media}
       OPENPOST_JWT_SECRET: ${OPENPOST_JWT_SECRET:?Set OPENPOST_JWT_SECRET in .env.dz-smart-seller}
       OPENPOST_ENCRYPTION_KEY: ${OPENPOST_ENCRYPTION_KEY:?Set OPENPOST_ENCRYPTION_KEY in .env.dz-smart-seller}
       OPENPOST_PROVIDER_APPS: ${OPENPOST_PROVIDER_APPS:-[]}
