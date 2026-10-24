@@ -222,3 +222,7 @@ We believe in open-source software, freedom of choice, and empowering people wit
 ## License
 
 This repository's source code is available under the [AGPL-3.0 license](LICENSE).
+
+## DZ Smart Seller combined deployment
+
+This branch includes a Compose overlay for running Postmill and OpenPost side by side as the first DZ Smart Seller integration milestone. See [the integration guide](docs/DZ-SMART-SELLER-INTEGRATION.md) and [the Compose overlay](docker-compose.dz-smart-seller.yml). The two applications remain separate services and accounts until a tested shared API/authentication layer is implemented.
