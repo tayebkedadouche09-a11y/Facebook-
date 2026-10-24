@@ -79,7 +79,7 @@ try {
     "status" {
       & docker @Compose ps
       if ($LASTEXITCODE -ne 0) { throw "Could not read Compose status. Check that the environment file exists." }
-      foreach ($Url in @("http://localhost:3000", "http://localhost:4007", "http://localhost:8080/api/v1/ready")) {
+      foreach ($Url in @("http://localhost:3000", "http://localhost:4007", "http://localhost:8080/api/v1/ready", "http://localhost:8288")) {
         try {
           $Response = Invoke-WebRequest -Uri $Url -TimeoutSec 4 -UseBasicParsing
           Write-Host "OK  $Url ($($Response.StatusCode))"
