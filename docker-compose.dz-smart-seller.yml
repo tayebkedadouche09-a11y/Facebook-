@@ -45,6 +45,15 @@ services:
     networks:
       - postmill-network
 
+  postmill-inngest:
+    image: inngest/inngest:latest
+    restart: unless-stopped
+    command: ["inngest", "dev", "-u", "http://dz-smart-seller-postmill:5000/api/inngest"]
+    ports:
+      - "8288:8288"
+    networks:
+      - postmill-network
+
   openpost:
     image: ghcr.io/getopenpost/openpost:latest
     restart: unless-stopped
