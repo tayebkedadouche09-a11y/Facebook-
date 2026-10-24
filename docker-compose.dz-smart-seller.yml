@@ -3,9 +3,8 @@
 # docker compose --env-file .env.dz-smart-seller -f docker-compose.yaml -f docker-compose.dz-smart-seller.yml config
 # docker compose --env-file .env.dz-smart-seller -f docker-compose.yaml -f docker-compose.dz-smart-seller.yml up -d
 #
-# This deploys both products side by side while preserving their separate
-# databases and user interfaces. It does NOT yet merge their frontends or
-# accounts into one application.
+# This deploys both products side by side with a shared launch portal. The
+# applications still have separate accounts, databases and social connections.
 
 services:
   postmill:
@@ -41,26 +40,10 @@ services:
     networks:
       - postmill-network
 
-  dz-smart-seller-portal:
-    image: nginx:alpine
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    volumes:
-      - ./integrations/portal:/usr/share/nginx/html:ro
-    depends_on:
-      postmill:
-        condition: service_started
-      spotlight:
-    profiles:
-      - monitoring
-
-  openpost:
-        condition: service_healthy
-
   openpost:
     image: ghcr.io/getopenpost/openpost:latest
     restart: unless-stopped
+    stop_grace_period: 15s
     ports:
       - "8080:8080"
     environment:
@@ -86,6 +69,24 @@ services:
       timeout: 3s
       retries: 3
       start_period: 15s
+
+  dz-smart-seller-portal:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ./integrations/portal:/usr/share/nginx/html:ro
+    depends_on:
+      postmill:
+        condition: service_started
+      openpost:
+        condition: service_healthy
+
+  # Optional diagnostics container. Start it only with --profile monitoring.
+  spotlight:
+    profiles:
+      - monitoring
 
 volumes:
   dz-smart-seller-redis:
