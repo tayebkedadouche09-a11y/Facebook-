@@ -1,0 +1,36 @@
+name: DZ Smart Seller Compose validation
+
+on:
+  push:
+    branches:
+      - dz-smart-seller-integration
+  pull_request:
+    branches:
+      - dz-smart-seller-integration
+  workflow_dispatch:
+
+jobs:
+  compose-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create temporary validation environment
+        run: |
+          cp .env.dz-smart-seller.example .env.dz-smart-seller
+          sed -i 's/REPLACE_WITH_RANDOM_HEX_SECRET/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/g' .env.dz-smart-seller
+          chmod 600 .env.dz-smart-seller
+
+      - name: Validate combined Compose configuration
+        run: |
+          docker compose --env-file .env.dz-smart-seller \
+            -f docker-compose.yaml \
+            -f docker-compose.dz-smart-seller.yml config --quiet
+
+      - name: Ensure real environment files are not tracked
+        run: |
+          if git ls-files --error-unmatch .env.dz-smart-seller >/dev/null 2>&1; then
+            echo "Refusing to track the real integration environment file."
+            exit 1
+          fi
