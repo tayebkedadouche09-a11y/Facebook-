@@ -39,6 +39,19 @@ services:
     networks:
       - postmill-network
 
+  dz-smart-seller-portal:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ./integrations/portal:/usr/share/nginx/html:ro
+    depends_on:
+      postmill:
+        condition: service_started
+      openpost:
+        condition: service_healthy
+
   openpost:
     image: ghcr.io/getopenpost/openpost:latest
     restart: unless-stopped
