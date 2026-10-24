@@ -17,9 +17,14 @@ services:
       ENCRYPTION_KEY: ${POSTMILL_ENCRYPTION_KEY:?Set POSTMILL_ENCRYPTION_KEY in .env.dz-smart-seller}
       DATABASE_URL: postgresql://postmill-user:${POSTMILL_DB_PASSWORD:?Set POSTMILL_DB_PASSWORD in .env.dz-smart-seller}@postmill-postgres:5432/postmill-db-local
       REDIS_URL: redis://postmill-redis:6379
+      INNGEST_DEV: "1"
+      INNGEST_BASE_URL: http://postmill-inngest:8288
+      USE_INNGEST: "true"
     depends_on:
       postmill-redis:
         condition: service_healthy
+      postmill-inngest:
+        condition: service_started
 
   postmill-postgres:
     container_name: dz-smart-seller-postgres
