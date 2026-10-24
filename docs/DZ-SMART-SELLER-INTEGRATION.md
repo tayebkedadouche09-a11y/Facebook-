@@ -23,13 +23,13 @@ From the repository root:
 cp .env.dz-smart-seller.example .env.dz-smart-seller
 ```
 
-Replace every `REPLACE_WITH_RANDOM_HEX_SECRET` value with a unique secret generated using:
+The PowerShell launcher in `integrations/launch-dz-smart-seller.ps1` creates this file and generates a unique random value for each secret on first start. If you create it manually, replace every `REPLACE_WITH_RANDOM_HEX_SECRET` value with a different value generated using:
 
 ```sh
 openssl rand -hex 32
 ```
 
-Do not reuse the same secret across variables. Keep `.env.dz-smart-seller` private and never commit it.
+Do not reuse secrets. The generated `.env.dz-smart-seller` file is excluded by `.gitignore`; never commit it or share its contents.
 
 For local testing, keep the default URLs:
 - DZ Smart Seller portal: http://localhost:3000
@@ -69,6 +69,36 @@ docker compose --env-file .env.dz-smart-seller \
   -f docker-compose.yaml \
   -f docker-compose.dz-smart-seller.yml logs --tail=100
 ```
+
+
+## Connect your real Facebook Page (Meta)
+
+**Do not enter your Meta App Secret in the browser, a chat, GitHub, or screenshots.** Configure it only in the private local `.env.dz-smart-seller` file.
+
+1. Create or select an app in [Meta for Developers](https://developers.facebook.com/apps/) and configure Facebook Login.
+2. For a public deployment, use a domain with HTTPS first. Set `OPENPOST_URL` / `OPENPOST_APP_URL` to that public origin and set `OPENPOST_MEDIA_URL` to a public HTTPS media origin. A local `localhost` address is not reachable by Meta to fetch image/video files.
+3. Add this exact OAuth redirect URI in the Meta app, replacing the example domain with your real OpenPost domain:
+
+   ```text
+   https://YOUR-OPENPOST-DOMAIN/api/v1/accounts/facebook/callback
+   ```
+
+4. Edit `.env.dz-smart-seller` and replace `OPENPOST_PROVIDER_APPS=[]` with a compact JSON array using your own values:
+
+   ```text
+   OPENPOST_PROVIDER_APPS=[{"provider":"facebook","client_id":"YOUR_META_APP_ID","client_secret":"YOUR_META_APP_SECRET","redirect_uri":"https://YOUR-OPENPOST-DOMAIN/api/v1/accounts/facebook/callback"}]
+   ```
+
+5. Restart the services with `.\integrations\launch-dz-smart-seller.ps1 start` or the manual Compose command. Open OpenPost, go to **Settings → Workspace → Social accounts**, choose Facebook, sign in, and select the Page you manage.
+6. Test a text-only post first. Test image/video separately after public HTTPS media is configured. Verify the post appears on the actual Page and check the app logs if it fails.
+
+OpenPost documents these Page permissions for its Facebook connector: `business_management`, `pages_show_list`, `pages_read_engagement`, `pages_read_user_content`, `pages_manage_engagement`, `pages_manage_metadata`, `pages_manage_posts`, and `pages_messaging`. Request only the access your use case needs; Meta review and business verification may be required before production use. Development-mode testing is limited to app-role users and is not general public approval.
+
+Official reference: https://developers.facebook.com/docs/pages-api/
+
+## Important readiness boundary
+
+This combined stack is **not yet a single shared-data application**. It provides one launch portal and two separate services. They retain separate accounts, settings, data stores, media libraries, and social connections. It is not possible to truthfully certify the whole stack as error-free until the containers start on a real Docker host and a real Meta Page connection and test publication succeed.
 
 ## Acceptance checks
 
