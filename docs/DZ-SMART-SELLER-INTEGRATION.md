@@ -51,7 +51,26 @@ docker compose --env-file .env.dz-smart-seller \
 
 Fix any missing environment variable or Compose validation error before starting services.
 
-## Start
+## Start on Windows
+
+From PowerShell in the repository root, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\integrations\launch-dz-smart-seller.ps1 start
+```
+
+Check services, follow logs, or stop without deleting saved data:
+
+```powershell
+.\integrations\launch-dz-smart-seller.ps1 status
+.\integrations\launch-dz-smart-seller.ps1 logs
+.\integrations\launch-dz-smart-seller.ps1 stop
+```
+
+The launcher generates local secrets, validates the combined Compose configuration, and starts the services. It does not create a public HTTPS domain or configure your Meta app.
+
+## Start manually
 
 ```sh
 docker compose --env-file .env.dz-smart-seller \
@@ -96,6 +115,10 @@ docker compose --env-file .env.dz-smart-seller \
 OpenPost documents these Page permissions for its Facebook connector: `business_management`, `pages_show_list`, `pages_read_engagement`, `pages_read_user_content`, `pages_manage_engagement`, `pages_manage_metadata`, `pages_manage_posts`, and `pages_messaging`. Request only the access your use case needs; Meta review and business verification may be required before production use. Development-mode testing is limited to app-role users and is not general public approval.
 
 Official reference: https://developers.facebook.com/docs/pages-api/
+
+## Inngest local dev server
+
+The combined stack includes an Inngest development server on port 8288 so Postmill's scheduled publishing and background jobs can register without a paid Inngest Cloud account. This is intended for local personal use; it is not a managed production service.
 
 ## Background jobs and scheduled publishing
 
