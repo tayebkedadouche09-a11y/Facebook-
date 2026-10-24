@@ -50,7 +50,7 @@ services:
     restart: unless-stopped
     command: ["inngest", "dev", "-u", "http://dz-smart-seller-postmill:5000/api/inngest"]
     ports:
-      - "8288:8288"
+      - "127.0.0.1:8288:8288"
     networks:
       - postmill-network
 
@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
     stop_grace_period: 15s
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     environment:
       OPENPOST_PORT: "8080"
       OPENPOST_EDITION: selfhost
@@ -88,7 +88,7 @@ services:
     image: nginx:alpine
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "127.0.0.1:3000:80"
     volumes:
       - ./integrations/portal:/usr/share/nginx/html:ro
     depends_on:
