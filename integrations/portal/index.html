@@ -48,7 +48,12 @@
         <a id="openpost-link" class="button alt" href="http://localhost:8080">فتح OpenPost</a>
       </article>
     </section>
-    <p class="foot">للتشغيل المحلي: افتح هذه اللوحة على المنفذ 3000. Postmill يعمل على 4007 وOpenPost على 8080. لا تدخل بيانات حسابات حقيقية حتى تنجح اختبارات الصحة والنشر التجريبي.</p>
+    <section class="notice" style="margin-top:16px">
+      <strong>قبل ربط صفحة Facebook:</strong>
+      أنشئ تطبيقًا في Meta for Developers، واضبط Facebook Login وصلاحيات الصفحات وعنوان OAuth الصحيح. تحتاج منشورات الصور والفيديو إلى رابط وسائط عام يعمل عبر HTTPS؛ رابط localhost لا يكفي.
+      <p style="margin:10px 0 0"><a href="https://github.com/tayebkedadouche09-a11y/Facebook-/blob/dz-smart-seller-integration/docs/DZ-SMART-SELLER-INTEGRATION.md" style="color:var(--accent)">اقرأ دليل الإعداد والربط خطوة بخطوة</a></p>
+    </section>
+    <p class="foot">الخدمات المحلية: البوابة 3000، Postmill 4007، OpenPost 8080، ولوحة مهام النشر Inngest على 8288. لا تدخل بيانات حسابات حقيقية حتى تنجح اختبارات الصحة والنشر التجريبي.</p>
   </main>
   <script>
     const host = window.location.hostname || "localhost";
