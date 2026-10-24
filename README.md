@@ -232,7 +232,7 @@ This branch contains the first DZ Smart Seller deployment milestone: a shared Ar
 1. Install and start Docker Desktop.
 2. Open PowerShell at the repository root.
 3. Run `Set-ExecutionPolicy -Scope Process Bypass`.
-4. Run `./integrations/launch-dz-smart-seller.ps1 start`.
+4. Run `.\\integrations\\launch-dz-smart-seller.ps1 start`.
 
 Local entry points:
 - Portal: http://localhost:3000
