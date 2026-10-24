@@ -37,7 +37,7 @@ For local testing, keep the default URLs:
 - Postmill: http://localhost:4007
 - OpenPost: http://localhost:8080
 
-For public deployment, do not use the local defaults. Configure real HTTPS URLs, a reverse proxy, secure signup settings, backups, and provider callback URLs before connecting social accounts.
+All published ports are bound to `127.0.0.1` so the local apps are not exposed directly to your network. For public deployment, keep the loopback bindings and put a properly configured HTTPS reverse proxy in front of them, use separate public origins for Postmill and OpenPost, configure secure signup settings and backups, and use those public origins in the Meta callback and media URLs.
 
 The portal at port 3000 provides one Arabic starting page with links to both services. It does not embed their screens or merge authentication/data yet.
 
@@ -96,7 +96,7 @@ docker compose --env-file .env.dz-smart-seller \
 **Do not enter your Meta App Secret in the browser, a chat, GitHub, or screenshots.** Configure it only in the private local `.env.dz-smart-seller` file.
 
 1. Create or select an app in [Meta for Developers](https://developers.facebook.com/apps/) and configure Facebook Login.
-2. For a public deployment, use a domain with HTTPS first. Set `OPENPOST_URL` / `OPENPOST_APP_URL` to that public origin and set `OPENPOST_MEDIA_URL` to a public HTTPS media origin. A local `localhost` address is not reachable by Meta to fetch image/video files.
+2. For a public deployment, use a domain with HTTPS first. Set `OPENPOST_URL` / `OPENPOST_APP_URL` to that public origin and set `OPENPOST_MEDIA_URL` to a public HTTPS media origin. A local `localhost` address is not reachable by Meta to fetch image/video files. Keep the app bound to loopback and expose it only through your HTTPS reverse proxy.
 3. Add this exact OAuth redirect URI in the Meta app, replacing the example domain with your real OpenPost domain:
 
    ```text
