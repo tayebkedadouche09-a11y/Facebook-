@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>DZ Smart Seller</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1220;--panel:#131e30;--line:#2a3950;--text:#edf3fb;--muted:#a8b6ca;--accent:#70e1c1;--blue:#9bbcff}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#182a42 0,var(--bg) 60%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+    main{width:min(980px,calc(100% - 32px));margin:0 auto;padding:52px 0 36px}
+    .top{display:flex;gap:16px;align-items:center;margin-bottom:32px}.logo{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#70e1c1,#9bbcff);color:#102031;font-weight:900;font-size:20px}
+    h1{font-size:clamp(28px,5vw,42px);margin:0 0 6px;letter-spacing:-.03em}.sub{margin:0;color:var(--muted);line-height:1.7}
+    .notice{padding:14px 16px;border:1px solid #3d566e;background:#16263a;border-radius:14px;color:#c9d8e9;line-height:1.7;margin-bottom:24px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .card{background:linear-gradient(160deg,#17243a,var(--panel));border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;min-height:260px}
+    .icon{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:#223b50;font-size:24px;margin-bottom:16px}
+    h2{font-size:21px;margin:0 0 8px}.desc{color:var(--muted);line-height:1.7;margin:0 0 20px;flex:1}
+    a.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:var(--accent);color:#09251f;font-weight:750;padding:12px 16px;border-radius:12px;min-height:46px}
+    a.button.alt{background:var(--blue);color:#0e1d38}
+    .foot{color:var(--muted);font-size:13px;line-height:1.7;margin-top:24px}
+    @media(max-width:480px){main{padding-top:28px}.top{align-items:flex-start}.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <main>
+    <header class="top">
+      <div class="logo" aria-hidden="true">DZ</div>
+      <div>
+        <h1>DZ Smart Seller</h1>
+        <p class="sub">مركز أدوات التسويق وصناعة المحتوى — نسخة أولية</p>
+      </div>
+    </header>
+    <section class="notice">
+      جمعنا مدخل التطبيقين في لوحة واحدة. في هذه المرحلة، كل خدمة ما زالت مستقلة بحساباتها وقاعدة بياناتها؛ الربط الكامل بين الحملات والزبائن والتحليلات يحتاج مرحلة تطوير واختبار إضافية.
+    </section>
+    <section class="grid" aria-label="التطبيقات">
+      <article class="card">
+        <div class="icon" aria-hidden="true">📣</div>
+        <h2>Postmill AI</h2>
+        <p class="desc">إدارة وجدولة المنشورات، الحملات، تحليلات الشبكات الاجتماعية، صندوق التفاعل وأدوات التصميم.</p>
+        <a id="postmill-link" class="button" href="http://localhost:4007">فتح Postmill</a>
+      </article>
+      <article class="card">
+        <div class="icon" aria-hidden="true">🎬</div>
+        <h2>OpenPost</h2>
+        <p class="desc">مكتبة الوسائط، محرر الصور والفيديو، كتابة المحتوى، سير العمل والجدولة.</p>
+        <a id="openpost-link" class="button alt" href="http://localhost:8080">فتح OpenPost</a>
+      </article>
+    </section>
+    <p class="foot">للتشغيل المحلي: افتح هذه اللوحة على المنفذ 3000. Postmill يعمل على 4007 وOpenPost على 8080. لا تدخل بيانات حسابات حقيقية حتى تنجح اختبارات الصحة والنشر التجريبي.</p>
+  </main>
+  <script>
+    const host = window.location.hostname || "localhost";
+    document.getElementById("postmill-link").href = window.location.protocol + "//" + host + ":4007";
+    document.getElementById("openpost-link").href = window.location.protocol + "//" + host + ":8080";
+  </script>
+</body>
+</html>
