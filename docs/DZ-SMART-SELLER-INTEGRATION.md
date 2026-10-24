@@ -12,8 +12,8 @@ This is a **side-by-side deployment milestone with a shared launch portal**, not
 ## Local requirements
 
 - Docker Engine and Docker Compose plugin.
-- A machine with enough memory and disk for both applications and PostgreSQL/Redis. A computer with 4 GB RAM may struggle to run both locally; use one service at a time for development or a remote host if needed.
-- OpenSSL, to generate random secrets.
+- A machine with enough memory and disk for both applications and PostgreSQL/Redis. A computer with 4 GB RAM may struggle to run both locally; expect slow startup and consider running the stack on a remote host if needed.
+- Windows PowerShell 5.1+ or PowerShell 7; the launcher generates secrets automatically. OpenSSL is only needed if you create the environment file manually.
 
 ## Configure
 
