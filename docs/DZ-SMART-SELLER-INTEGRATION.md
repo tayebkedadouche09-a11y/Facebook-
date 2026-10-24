@@ -33,6 +33,7 @@ Do not reuse secrets. The generated `.env.dz-smart-seller` file is excluded by `
 
 For local testing, keep the default URLs:
 - DZ Smart Seller portal: http://localhost:3000
+- Inngest local jobs dashboard: http://localhost:8288
 - Postmill: http://localhost:4007
 - OpenPost: http://localhost:8080
 
@@ -95,6 +96,10 @@ docker compose --env-file .env.dz-smart-seller \
 OpenPost documents these Page permissions for its Facebook connector: `business_management`, `pages_show_list`, `pages_read_engagement`, `pages_read_user_content`, `pages_manage_engagement`, `pages_manage_metadata`, `pages_manage_posts`, and `pages_messaging`. Request only the access your use case needs; Meta review and business verification may be required before production use. Development-mode testing is limited to app-role users and is not general public approval.
 
 Official reference: https://developers.facebook.com/docs/pages-api/
+
+## Background jobs and scheduled publishing
+
+The overlay enables the local Inngest dev server and sets `USE_INNGEST=true` for Postmill. Open the Inngest dashboard at `http://localhost:8288` and confirm that the Postmill functions register. Scheduled posts and analytics must be tested end-to-end; a running container alone does not prove that the job queue is working. The local Inngest dev server is for a personal/self-hosted setup and is not a managed production scheduler.
 
 ## Important readiness boundary
 
