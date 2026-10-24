@@ -7,7 +7,7 @@ This branch combines the deployment of the two existing projects without changin
 
 ## Important status
 
-This is a **side-by-side deployment milestone**, not yet a single unified frontend. The two applications keep separate databases, accounts, configuration and social connections. A shared login, shared campaign model, cross-app navigation and a common marketing-memory service require a later application-level integration.
+This is a **side-by-side deployment milestone with a shared launch portal**, not yet a single unified application frontend. The two applications keep separate databases, accounts, configuration and social connections. A shared login, shared campaign model, cross-app navigation and a common marketing-memory service require a later application-level integration.
 
 ## Local requirements
 
@@ -32,10 +32,13 @@ openssl rand -hex 32
 Do not reuse the same secret across variables. Keep `.env.dz-smart-seller` private and never commit it.
 
 For local testing, keep the default URLs:
+- DZ Smart Seller portal: http://localhost:3000
 - Postmill: http://localhost:4007
 - OpenPost: http://localhost:8080
 
 For public deployment, do not use the local defaults. Configure real HTTPS URLs, a reverse proxy, secure signup settings, backups, and provider callback URLs before connecting social accounts.
+
+The portal at port 3000 provides one Arabic starting page with links to both services. It does not embed their screens or merge authentication/data yet.
 
 ## Validate before starting
 
